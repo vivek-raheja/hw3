@@ -2,6 +2,7 @@
 #include <fstream>
 #include <functional>
 #include "llrec.h"
+#include "stack.h"
 using namespace std;
 
 /**
@@ -68,28 +69,83 @@ void dealloc(Node* head)
 // -----------------------------------------------
 
 
-
-
-
+bool fn(int x) {
+	if( x%2 == 0)
+		return 1;
+	
+	return 0;
+}
 int main(int argc, char* argv[])
 {
-    if(argc < 2) {
-        cout << "Please provide an input file" << endl;
-        return 1;
-    }
+	if (argc < 2) {
+		return -1;
+	}
 
-    // -----------------------------------------------
-    // Feel free to update any code below this point
-    // -----------------------------------------------
-    Node* head = readList(argv[1]);
-    cout << "Original list: ";
-    print(head);
+		
+	Node* mylist = readList(argv[1]);	
+	Node* smaller = NULL;
+	Node* larger = NULL;
+	llpivot(mylist, smaller, larger, 10);
 
-    // Test out your linked list code
+	cout << "Smaller" << endl;
+	while(smaller != NULL) {
+		cout << smaller->val << endl;
+		smaller = smaller->next;
+	}
 
-
-
+	cout << "Greater" << endl;
+	while(larger != NULL) {
+		cout << larger->val << endl;
+		larger = larger->next;
+	}
+	
+	srand(time(0));
+	//Create the nodes
+	int numNodes = 10;
+	int count;
+	int number = rand() / 1000000;
+	
+	Node* currentNode = new Node(number, NULL);
+	Node* startNode;
+	smaller = NULL;
+	larger = NULL;
+	
+	int pivot = number;
+	cout << "Pivot:" << pivot << endl;
     
-    return 0;
+	for(count=0;count<numNodes;count++) {
+		cout << "Value " << count << " is " << currentNode->val << endl;
+		number = rand() / 1000000;
+		Node* nextNode = new Node(number, NULL);
+		currentNode->next = nextNode;
+		if(count == 0)
+			startNode = currentNode;
+			
+		currentNode = nextNode;
+	}
+	
+	llpivot(startNode, smaller, larger, pivot);
+	
+	
+	Node* x = llfilter(startNode, fn);
+	cout << "Function" << endl;
+	while(x != NULL) {
+		cout << x->val << endl;
+		x = x->next;
+	}
+	
+	cout << "Smaller" << endl;
+	while(smaller != NULL) {
+		cout << smaller->val << endl;
+		smaller = smaller->next;
+	}
+	
+	cout << "Greater" << endl;
+	while(larger != NULL) {
+		cout << larger->val << endl;
+		larger = larger->next;
+	}
+	
+	return 0;
 
 }
